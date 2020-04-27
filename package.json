@@ -1,0 +1,12 @@
+{
+  "name": "TO-DO",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "Malwina8 <48411653+Malwina8@users.noreply.github.com>",
+  "license": "MIT",
+  "start": "nodemon server.js cd client yarn start",
+  "dependencies": {
+    "express": "^4.17.1",
+    "nodemon": "^2.0.3"
+  }
+}
