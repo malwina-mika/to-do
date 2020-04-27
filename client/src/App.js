@@ -1,4 +1,5 @@
 import React from 'react';
+// const socket = io();
 
 class App extends React.Component {
 
