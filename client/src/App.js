@@ -1,9 +1,65 @@
 import React from 'react';
-// const socket = io();
+import io from 'socket.io-client';
 
 class App extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      tasks: [],
+      taskName: '',
+    }
+
+    this.submitForm = this.submitForm.bind(this);
+    this.updateTask = this.updateTask.bind(this);
+  }
+  componentDidMount() {
+    this.socket = io('localhost:8000');
+    this.socket.on('updateData', tasks => {
+      this.updateData(tasks)
+    })
+    this.socket.on('addTask', task => {
+      this.addTask(task)
+    });
+    this.socket.on('removeTask', id =>
+      this.removeTask(id)
+    );
+  }
+
+  removeTask(id) {
+    this.setState({
+      tasks: this.state.tasks.filter(item => item !== id)
+    })
+    this.socket.emit('removeTask', id)
+  }
+
+  updateData(tasks) {
+    this.setState({
+      tasks: tasks
+    })
+  }
+
+  updateTask(event) {
+    this.setState({
+      taskName: event.target.value
+    });
+  }
+
+  addTask(task) {
+    this.setState({
+      tasks: [...this.state.tasks, task],
+    })
+  }
+
+  submitForm(event) {
+    event.preventDefault();
+    this.addTask(this.state.taskName)
+    this.setState({
+      taskName: '',
+    })
+  }
 
   render() {
+    const { tasks, taskName } = this.state
     return (
       <div className="App">
 
@@ -15,12 +71,27 @@ class App extends React.Component {
           <h2>Tasks</h2>
 
           <ul className="tasks-section__list" id="tasks-list">
-            <li class="task">Shopping <button class="btn btn--red">Remove</button></li>
-            <li class="task">Go out with a dog <button class="btn btn--red">Remove</button></li>
+            {tasks.map(item => (
+              <li className="task" key={item}>
+                {item}
+                <button
+                  className="btn btn--red"
+                  onClick={() => this.removeTask(item)}>
+                  Remove
+                </button>
+              </li>
+            ))}
           </ul>
 
-          <form id="add-task-form">
-            <input className="text-input" autocomplete="off" type="text" placeholder="Type your description" id="task-name" />
+          <form id="add-task-form" onSubmit={this.submitForm}>
+            <input
+              className="text-input"
+              autoComplete="off"
+              type="text"
+              placeholder="Type your description"
+              id="task-name"
+              value={taskName}
+              onChange={this.updateTask} />
             <button className="btn" type="submit">Add</button>
           </form>
 

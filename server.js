@@ -30,8 +30,10 @@ io.on('connection', socket => {
     tasks.push(task);
     socket.broadcast.emit('addTask', task);
   });
-  socket.on('removeTask', index => {
+  socket.on('removeTask', task => {
+    const index = tasks.findIndex(item => item.id == task.id)
     tasks.splice(index, 1);
+    socket.broadcast.emit('removeTask', task);
   });
 });
 
