@@ -4,10 +4,13 @@
   "main": "index.js",
   "author": "Malwina8 <48411653+Malwina8@users.noreply.github.com>",
   "license": "MIT",
-  "start": "nodemon server.js cd client yarn start",
+  "scripts": {
+    "start": "nodemon server.js"
+  },
   "dependencies": {
     "express": "^4.17.1",
     "nodemon": "^2.0.3",
-    "socket.io": "^2.3.0"
+    "socket.io": "^2.3.0",
+    "uuid": "^7.0.3"
   }
 }
